@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //第一个参数 是一个数组 有24个值 代表24个小时的温度
+        //第二个参数 是查询这个表[temporary_temp_heat_consume] 返回的二维数据
+        //select temp,heat_consume from  temporary_temp_heat_consume where season='2019-2020'
+
+        //回返值 是一个只有两个元素的 二维数组 第一个数组是预测负荷  每二个是调度负荷
+
+        function getAllHeatConsume(tempArray, tempHeat) {
+            let initTarget = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            let initDispatch = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            if (tempArray.length != 24 || tempHeat.length < 2) {
+                return [initTarget, initDispatch]
+            }
+
+            function getConsume(temp) {
+                let index = 0;
+                let diff = 0;
+                for (let i = 1; i < tempHeat.length; i++) {
+                    let curIndex = i;
+                    let curDiff = temp - tempHeat[i][0];
+                    if (curDiff == 0) {
+                        return secondPara[i][1];
+                    }
+                    if (i == 1) {
+                        index = curIndex;
+                        diff = curDiff;
+                    } else {
+                        if (curDiff < diff) {
+                            index = curIndex;
+                            diff = curDiff;
+                        }
+                    }
+                }
+                return secondPara[index][1];
+            }
+            for (let i = 0; i < initTarget.length; i++) {
+                initTarget[i] = getConsume(tempArray[i]);
+                initDispatch[i] = initTarget[i] * 1.1;
+            }
+            return [initTarget, initDispatch];
+        }
+
+        //第一个参数 是一个数组 有24个值 代表24个小时的温度
+        const firstPara = [-6, -5, -5, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -6, -5, -5, -3, -2, -1, 0, 1];
+        //第二个参数
+        const secondPara = [
+            ["temp", "heat_consume"],
+            [-6, 36.73],
+            [-5, 35.2],
+            [-4, 33.67],
+            [-3, 31.73],
+            [-2, 25.73],
+            [-1, 22.73] //实际返回下面还有很多
+        ];
+        console.log(getAllHeatConsume(firstPara, secondPara));
+    </script>
+</body>
+
+</html>
