@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+      <script src="arraytojson.js"></script>
+      <script src="rowtocol.js"></script>
+    </head>
+    <body>
+        <script>
+          let rets=[
+            ["district","year_mon","day","heat","water"],
+            ["银川","2020-2-1","1","32","234"],
+            ["银川","2020-2-1","1","32","234"],
+            ["银川","2020-2-1","1","32","234"],
+            ["银川","2020-2-1","1","32","234"]
+          ];
+          console.log((new ArrToJson(rets)).getJsonObjList());
+
+          let tb=[
+            {district:"银川",year_mon:"2020-2-1",day:"1",heat:"32",water:"345"},
+            {district:"银川",year_mon:"2020-2-1",day:"2",heat:"32",water:"345"},
+            {district:"银川",year_mon:"2020-2-1",day:"3",heat:"32",water:"345"},
+            {district:"银川",year_mon:"2020-2-1",day:"4",heat:"32",water:"345"},
+            {district:"银川2",year_mon:"2020-2-1",day:"1",heat:"31",water:"345"},
+            {district:"银川2",year_mon:"2020-2-1",day:"2",heat:"33",water:"345"},
+            {district:"银川2",year_mon:"2020-2-1",day:"3",heat:"32",water:"345"},
+            {district:"银川2",year_mon:"2020-2-1",day:"4",heat:"35",water:"345"},
+            {district:"银川2",year_mon:"2020-2-1",day:"5",heat:"32",water:"345"}
+          ];
+
+          let trans=new RowToCol(tb);
+          trans.setFixedCol("district","year_mon");
+          trans.setTransCol({title:"day",val:"heat"},{title:"day",val:"water"});
+          console.log(trans.getTransTable());
+           
+        </script>
+    </body>
+</html>
