@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class StationHeartList {
+            constructor(arrHeatPlan, arrTemp, arrHeatReal) {
+                this.heatPlan = arrHeatPlan;
+                this.temp = arrTemp;
+                this.heatReal = arrHeatReal;
+
+                this.avgTemp = 0;
+                this.createAvgTemp();
+            }
+
+            //计算平均值
+            createAvgTemp() {
+                let sumTemp = 0;
+                let count = 0;
+                for (let i = 1; i < this.temp.length; i++) {
+                    sumTemp += parseFloat(this.temp[i][1]);
+                    count++;
+                }
+                this.avgTemp = (count == 0 ? 0 : sumTemp / count);
+            }
+
+            //根据站名称找计划热值
+            getPlanHeatByStation(station) {
+                for (let i = 1; i < this.heatPlan.length; i++) {
+                    if (station == this.heatPlan[i][0]) {
+                        return parseFloat(this.heatPlan[i][1]);
+                    }
+                }
+                return 0;
+            }
+
+            getResult() {
+                const ret = [];
+                for (let i = 0; i < this.heatReal.length; i++) {
+                    let curObj = this.heatReal[i];
+
+                    let item = {};
+                    item.station_name = curObj.name;
+                    item.avg_temp = this.avgTemp;
+                    item.heat_plan = this.getPlanHeatByStation(curObj.name);
+                    item.heat_real = parseFloat(curObj.detail[0].consuption.sh);
+                    item.progress = (item.heat_plan == 0 ? 0 : item.heat_real / item.heat_plan) * 100;
+                    item.progress = item.progress.toFixed(1);
+                    item.jiechao = item.heat_plan - item.heat_real;
+                    item.final_plan = 0;
+                    ret.push(item);
+                }
+                return ret;
+            }
+        }
+
+        const heatPlan = [
+            ["station_name", "heat_sum"],
+            ["zhan1", "123"],
+            ["zhan2", "234"]
+        ];
+
+        const tempStation = [
+            ["ts", "temp"],
+            ["xxxxxxxx", "12"],
+            ["ssssssss", "18"]
+        ];
+
+        const heatReal = [{
+            "detail": [{
+                "date": "xxxxxxxx",
+                "consuption": {
+                    "w": "xxxx",
+                    "sh": "120"
+                }
+            }],
+            "name": "zhan1"
+        }, {
+            "detail": [{
+                "date": "xxxxxxxx",
+                "consuption": {
+                    "w": "xxxx",
+                    "sh": "200"
+                }
+            }],
+            "name": "zhan2"
+        }];
+
+        console.log(new StationHeartList(heatPlan, tempStation, heatReal).getResult());
+    </script>
+</body>
+
+</html>
