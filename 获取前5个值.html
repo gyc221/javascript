@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class Top5 {
+            constructor(fieldName, arrList) {
+                this.field = fieldName;
+                this.arr = arrList;
+            }
+            getResult() {
+                var ret = [
+                    ["", "", "", "", ""],
+                    [0, 0, 0, 0, 0]
+                ];
+                if (this.field != "sh" && this.field != "sw" && this.field != "se") {
+                    return ret;
+                }
+                if (!Array.isArray(this.arr)) {
+                    return ret;
+                }
+                this.arr.sort((a, b) => {
+                    return b.detail[0].consuption[this.field] - a.detail[0].consuption[this.field];
+                });
+
+                const len = this.arr.length <= 5 ? this.arr.length : 5;
+                for (let i = 0; i < len; i++) {
+                    ret[0][i] = this.arr[i].name;
+                    ret[1][i] = this.arr[i].detail[0].consuption[this.field].toFixed(1);
+                }
+                return ret;
+            }
+        }
+
+        var para = [{
+            "detail": [{
+                "consuption": {
+                    "w": 2742.202149,
+                    "sh": 40.397792413082,
+                    "e": 2742.202149,
+                    "sw": 40.397792413082,
+                    "se": 40.397792413082,
+                    "h": 2742.202149
+                },
+                "date": "2020-02-02"
+            }],
+            "name": "建南中心站"
+        }, {
+            "detail": [{
+                "consuption": {
+                    "w": 178.216614,
+                    "sh": 13.399745413534,
+                    "e": 178.216614,
+                    "sw": 13.399745413534,
+                    "se": 13.399745413534,
+                    "h": 178.216614
+                },
+                "date": "2020-02-02"
+            }],
+            "name": "康民中心热站"
+        }, {
+            "detail": [{
+                "consuption": {
+                    "w": 6502.105469,
+                    "sh": 253.00021280156,
+                    "e": 6502.105469,
+                    "sw": 253.00021280156,
+                    "se": 253.00021280156,
+                    "h": 6502.105469
+                },
+                "date": "2020-02-02"
+            }],
+            "name": "广和湖滨换热站"
+        }, {
+            "detail": [{
+                "consuption": {
+                    "w": 14769.265625,
+                    "sh": 189.25250672732,
+                    "e": 14769.265625,
+                    "sw": 189.25250672732,
+                    "se": 189.25250672732,
+                    "h": 14769.265625
+                },
+                "date": "2020-02-02"
+            }],
+            "name": "广和北门中心站"
+        }, {
+            "detail": [{
+                "consuption": {
+                    "w": 1530.04541,
+                    "sh": 321.43811134454,
+                    "e": 1530.04541,
+                    "sw": 321.43811134454,
+                    "se": 321.43811134454,
+                    "h": 1530.04541
+                },
+                "date": "2020-02-02"
+            }],
+            "name": "交通厅中心站"
+        }, {
+            "detail": [{
+                "consuption": {
+                    "w": 0,
+                    "sh": 0,
+                    "e": 0,
+                    "sw": 0,
+                    "se": 0,
+                    "h": 0
+                },
+                "date": "2020-02-02"
+            }],
+            "name": "北安中心站"
+        }, {
+            "detail": [{
+                "consuption": {
+                    "w": -15711.046387,
+                    "sh": -302.13550744231,
+                    "e": -15711.046387,
+                    "sw": -302.13550744231,
+                    "se": -302.13550744231,
+                    "h": -15711.046387
+                },
+                "date": "2020-02-02"
+            }],
+            "name": "北区"
+        }];
+
+
+
+        console.log(new Top5("sh", para).getResult());
+        console.log(new Top5("sw", para).getResult());
+        console.log(new Top5("se", para).getResult());
+    </script>
+</body>
+
+</html>
